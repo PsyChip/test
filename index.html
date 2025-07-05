@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager - Drag & Drop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>📁 File Manager</h1>
+            <p>Drag & drop images, ZIP files, or select files to manage and upload</p>
+        </header>
+
+        <!-- Steps Bar -->
+        <div class="steps-container">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Select Files</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Options</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Upload</div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <!-- Step 1: File Selection Section -->
+            <section class="step-section active" id="selectFilesSection">
+                <div class="file-manager-section">
+                    <!-- Embedded Drop Zone -->
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-content">
+                            <div class="drop-icon">📤</div>
+                            <h3>Drop images or ZIP files here or click to select files</h3>
+                            <button class="select-files-btn" id="selectFilesBtn">
+                                Select Files
+                            </button>
+                            <input type="file" id="fileInput" accept="image/*,.zip" multiple hidden>
+                            <p class="file-info">Supports: JPG, PNG, GIF, WebP, ZIP</p>
+                        </div>
+                    </div>
+
+                    <div class="file-manager-header">
+                        <h2>📂 Selected Files</h2>
+                        <div class="file-manager-actions">
+                            <span class="file-count" id="fileCount">0 files</span>
+                            <button class="clear-all-btn" id="clearAllBtn" disabled>
+                                Clear All
+                            </button>
+                            <button class="proceed-btn" id="proceedBtn" disabled>
+                                Proceed to Options →
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="file-grid" id="fileGrid">
+                        <div class="empty-state">
+                            <div class="empty-icon">📁</div>
+                            <p>No files selected yet</p>
+                            <p class="empty-subtitle">Upload some images to get started</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2: Options Section -->
+            <section class="step-section" id="optionsSection">
+                <div class="options-section">
+                    <div class="options-header">
+                        <h2>⚙️ Training Options</h2>
+                        <div class="options-actions">
+                            <button class="back-btn" id="optionsBackBtn">
+                                ← Back to Selection
+                            </button>
+                            <button class="proceed-btn" id="optionsProceedBtn">
+                                Proceed to Upload →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Training Type Section -->
+                    <div class="options-group">
+                        <h3>🎯 Training Type</h3>
+                        <p class="options-description">Choose the type of training model you want to create</p>
+                        <div class="training-type-grid">
+                            <div class="training-type-card active" data-type="style">
+                                <div class="training-type-icon">🎨</div>
+                                <div class="training-type-title">Style</div>
+                                <div class="training-type-description">Train on artistic styles, techniques, or visual aesthetics</div>
+                            </div>
+                            <div class="training-type-card" data-type="character">
+                                <div class="training-type-icon">👤</div>
+                                <div class="training-type-title">Character</div>
+                                <div class="training-type-description">Train on specific characters, people, or subjects</div>
+                            </div>
+                            <div class="training-type-card" data-type="generic">
+                                <div class="training-type-icon">🌐</div>
+                                <div class="training-type-title">Generic</div>
+                                <div class="training-type-description">General purpose training for various concepts</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyword Section -->
+                    <div class="options-group">
+                        <h3>🏷️ Keyword</h3>
+                        <p class="options-description">Enter a unique keyword that will trigger your trained model</p>
+                        <div class="keyword-input-container">
+                            <input type="text" id="keywordInput" class="keyword-input" placeholder="Enter your unique keyword (e.g., myartist, mycharacter)" maxlength="50">
+                            <div class="keyword-hint">This keyword will be used to activate your trained model in prompts</div>
+                        </div>
+                    </div>
+
+                    <!-- Training Steps Section -->
+                    <div class="options-group">
+                        <h3>📊 Training Steps</h3>
+                        <p class="options-description">Choose the number of training steps - more steps generally mean better quality but longer training time</p>
+                        <div class="training-steps-container">
+                            <div class="steps-slider-container">
+                                <input type="range" id="stepsSlider" class="steps-slider" min="0" max="7" value="2" step="1">
+                                <div class="steps-labels">
+                                    <span>100</span>
+                                    <span>300</span>
+                                    <span>500</span>
+                                    <span>1000</span>
+                                    <span>1250</span>
+                                    <span>1500</span>
+                                    <span>1750</span>
+                                    <span>2000</span>
+                                </div>
+                            </div>
+                            <div class="steps-info">
+                                <div class="steps-value" id="stepsValue">500</div>
+                                <div class="steps-description" id="stepsDescription">Balanced training - good quality with reasonable training time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Upload Section -->
+            <section class="step-section" id="uploadSection">
+                <div class="upload-section">
+                    <div class="upload-header">
+                        <h2>🚀 Upload Files</h2>
+                        <div class="upload-actions">
+                            <button class="back-btn" id="backBtn">
+                                ← Back to Options
+                            </button>
+                            <button class="upload-all-btn" id="uploadAllBtn">
+                                Start Upload
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Summary -->
+                    <div class="upload-summary">
+                        <div class="summary-card">
+                            <div class="summary-icon">📊</div>
+                            <div class="summary-content">
+                                <h3>Upload Summary</h3>
+                                <div class="summary-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Total Files:</span>
+                                        <span class="stat-value" id="totalFiles">0</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Total Size:</span>
+                                        <span class="stat-value" id="totalSize">0 MB</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Training Type:</span>
+                                        <span class="stat-value" id="summaryTrainingType">Style</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Keyword:</span>
+                                        <span class="stat-value" id="summaryKeyword">-</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Training Steps:</span>
+                                        <span class="stat-value" id="summarySteps">500</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Status:</span>
+                                        <span class="stat-value" id="uploadStatusText">Ready</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File List for Upload -->
+                    <div class="upload-file-list" id="uploadFileList">
+                        <!-- Files will be populated here -->
+                    </div>
+
+                    <!-- Upload Progress -->
+                    <div class="upload-progress-section" id="uploadProgressSection" style="display: none;">
+                        <h3>Upload Progress</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">0%</span>
+                        </div>
+                        <div class="upload-status" id="uploadStatus"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
