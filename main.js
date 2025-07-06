@@ -61,6 +61,7 @@ class FileManagerApp {
         
         // Step 4 elements (Training)
         this.trainingBackBtn = document.getElementById('trainingBackBtn');
+        this.skipTrainingBtn = document.getElementById('skipTrainingBtn');
         
         // Step 5 elements (Result)
         this.downloadModelBtn = document.getElementById('downloadModelBtn');
@@ -155,6 +156,10 @@ class FileManagerApp {
         // Step 4 button actions (Training)
         this.trainingBackBtn.addEventListener('click', () => {
             this.goToStep(3);
+        });
+
+        this.skipTrainingBtn.addEventListener('click', () => {
+            this.skipTraining();
         });
 
         // Step 5 button actions (Result)
@@ -264,6 +269,14 @@ class FileManagerApp {
     startTraining() {
         // Start the training process
         this.trainingManager.startTraining(this.trainingOptions.steps);
+    }
+
+    skipTraining() {
+        // Stop current training if running
+        this.trainingManager.stopTraining();
+        
+        // Immediately complete training and go to result
+        this.trainingManager.completeTraining();
     }
 
     populateUploadSection() {
