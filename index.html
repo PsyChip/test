@@ -29,6 +29,16 @@
                 <div class="step-number">3</div>
                 <div class="step-label">Upload</div>
             </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Training</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="5">
+                <div class="step-number">5</div>
+                <div class="step-label">Result</div>
+            </div>
         </div>
 
         <main class="main-content">
@@ -212,6 +222,184 @@
                             <span class="progress-text" id="progressText">0%</span>
                         </div>
                         <div class="upload-status" id="uploadStatus"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4: Training Section -->
+            <section class="step-section" id="trainingSection">
+                <div class="training-section">
+                    <div class="training-header">
+                        <h2>🧠 Training in Progress</h2>
+                        <div class="training-actions">
+                            <button class="back-btn" id="trainingBackBtn">
+                                ← Back to Upload
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Training Status -->
+                    <div class="training-status-card">
+                        <div class="training-status-icon">⚡</div>
+                        <div class="training-status-content">
+                            <h3>Model Training Active</h3>
+                            <p>Your AI model is being trained with the uploaded images. This process may take some time depending on the number of training steps.</p>
+                        </div>
+                    </div>
+
+                    <!-- Training Images Display -->
+                    <div class="training-images-section">
+                        <div class="training-image-container">
+                            <h4>📸 Training Data Sample</h4>
+                            <div class="training-image-wrapper">
+                                <img id="staticTrainingImage" src="https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Training sample" class="training-image static">
+                                <div class="image-label">Sample Training Image</div>
+                            </div>
+                        </div>
+
+                        <div class="training-image-container">
+                            <h4>🔄 Current Training Output</h4>
+                            <div class="training-image-wrapper">
+                                <img id="dynamicTrainingImage" src="https://picsum.photos/400/400?random=1" alt="Training progress" class="training-image dynamic">
+                                <div class="image-label">Live Training Progress</div>
+                                <div class="refresh-indicator">
+                                    <div class="refresh-dot"></div>
+                                    <span>Updating...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Training Progress -->
+                    <div class="training-progress-section">
+                        <h3>Training Progress</h3>
+                        <div class="large-progress-container">
+                            <div class="large-progress-bar">
+                                <div class="large-progress-fill" id="trainingProgressFill"></div>
+                                <div class="progress-percentage" id="trainingProgressText">0%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="training-stats">
+                            <div class="training-stat">
+                                <span class="stat-label">Current Step:</span>
+                                <span class="stat-value" id="currentStep">0</span>
+                                <span class="stat-total">/ <span id="totalSteps">500</span></span>
+                            </div>
+                            <div class="training-stat">
+                                <span class="stat-label">Elapsed Time:</span>
+                                <span class="stat-value" id="elapsedTime">00:00:00</span>
+                            </div>
+                            <div class="training-stat">
+                                <span class="stat-label">Remaining Time:</span>
+                                <span class="stat-value" id="remainingTime">Calculating...</span>
+                            </div>
+                            <div class="training-stat">
+                                <span class="stat-label">Training Speed:</span>
+                                <span class="stat-value" id="trainingSpeed">- steps/min</span>
+                            </div>
+                        </div>
+
+                        <div class="training-status-text" id="trainingStatusText">
+                            Initializing training process...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 5: Result Section -->
+            <section class="step-section" id="resultSection">
+                <div class="result-section">
+                    <div class="result-header">
+                        <h2>🎉 Training Complete</h2>
+                        <div class="result-actions">
+                            <button class="download-model-btn" id="downloadModelBtn">
+                                📥 Download Model
+                            </button>
+                            <button class="use-in-aria-btn" id="useInAriaBtn">
+                                🚀 Use in Aria
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Training Summary -->
+                    <div class="training-complete-card">
+                        <div class="complete-icon">✅</div>
+                        <div class="complete-content">
+                            <h3>Model Successfully Trained!</h3>
+                            <p>Your AI model has been successfully trained and is ready to use. You can now generate images using your custom keyword.</p>
+                            <div class="model-info">
+                                <div class="model-stat">
+                                    <span class="stat-label">Model Type:</span>
+                                    <span class="stat-value" id="resultTrainingType">Style</span>
+                                </div>
+                                <div class="model-stat">
+                                    <span class="stat-label">Keyword:</span>
+                                    <span class="stat-value" id="resultKeyword">myartist</span>
+                                </div>
+                                <div class="model-stat">
+                                    <span class="stat-label">Training Steps:</span>
+                                    <span class="stat-value" id="resultSteps">500</span>
+                                </div>
+                                <div class="model-stat">
+                                    <span class="stat-label">Training Time:</span>
+                                    <span class="stat-value" id="resultTrainingTime">15:32</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Generation Interface -->
+                    <div class="generation-interface">
+                        <div class="generation-input-section">
+                            <h3>🎨 Generate Images</h3>
+                            <p>Enter a prompt to generate images using your trained model. Include your keyword to activate the custom style.</p>
+                            
+                            <div class="prompt-input-container">
+                                <textarea id="promptInput" class="prompt-input" placeholder="Enter your prompt here... (e.g., 'a beautiful landscape in myartist style')" rows="3"></textarea>
+                                <button class="generate-btn" id="generateBtn">
+                                    Generate Image
+                                </button>
+                            </div>
+
+                            <div class="generation-options">
+                                <div class="option-group">
+                                    <label for="imageCount">Number of Images:</label>
+                                    <select id="imageCount" class="option-select">
+                                        <option value="1">1 Image</option>
+                                        <option value="2">2 Images</option>
+                                        <option value="4" selected>4 Images</option>
+                                        <option value="8">8 Images</option>
+                                    </select>
+                                </div>
+                                <div class="option-group">
+                                    <label for="imageSize">Image Size:</label>
+                                    <select id="imageSize" class="option-select">
+                                        <option value="512x512" selected>512×512</option>
+                                        <option value="768x768">768×768</option>
+                                        <option value="1024x1024">1024×1024</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="generation-output-section">
+                            <h3>Generated Images</h3>
+                            <div class="generated-images-grid" id="generatedImagesGrid">
+                                <div class="generation-placeholder">
+                                    <div class="placeholder-icon">🎨</div>
+                                    <p>Generated images will appear here</p>
+                                    <p class="placeholder-subtitle">Enter a prompt and click "Generate Image" to start</p>
+                                </div>
+                            </div>
+                            
+                            <div class="generation-progress" id="generationProgress" style="display: none;">
+                                <div class="generation-progress-bar">
+                                    <div class="generation-progress-fill" id="generationProgressFill"></div>
+                                </div>
+                                <div class="generation-status" id="generationStatus">Generating images...</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

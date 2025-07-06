@@ -2,6 +2,8 @@ import { ImageProcessor } from './imageProcessor.js';
 import { FileManager } from './fileManager.js';
 import { UploadManager } from './uploadManager.js';
 import { ZipProcessor } from './zipProcessor.js';
+import { TrainingManager } from './trainingManager.js';
+import { ImageGenerator } from './imageGenerator.js';
 
 class FileManagerApp {
     constructor() {
@@ -9,6 +11,8 @@ class FileManagerApp {
         this.fileManager = new FileManager();
         this.uploadManager = new UploadManager();
         this.zipProcessor = new ZipProcessor();
+        this.trainingManager = new TrainingManager();
+        this.imageGenerator = new ImageGenerator();
         this.files = new Map();
         this.currentStep = 1;
         
@@ -22,6 +26,7 @@ class FileManagerApp {
         this.initializeElements();
         this.setupEventListeners();
         this.initializeTrainingOptions();
+        this.setupTrainingManager();
     }
 
     initializeElements() {
@@ -54,6 +59,21 @@ class FileManagerApp {
         this.summarySteps = document.getElementById('summarySteps');
         this.uploadStatusText = document.getElementById('uploadStatusText');
         
+        // Step 4 elements (Training)
+        this.trainingBackBtn = document.getElementById('trainingBackBtn');
+        
+        // Step 5 elements (Result)
+        this.downloadModelBtn = document.getElementById('downloadModelBtn');
+        this.useInAriaBtn = document.getElementById('useInAriaBtn');
+        this.promptInput = document.getElementById('promptInput');
+        this.generateBtn = document.getElementById('generateBtn');
+        this.imageCount = document.getElementById('imageCount');
+        this.imageSize = document.getElementById('imageSize');
+        this.resultTrainingType = document.getElementById('resultTrainingType');
+        this.resultKeyword = document.getElementById('resultKeyword');
+        this.resultSteps = document.getElementById('resultSteps');
+        this.resultTrainingTime = document.getElementById('resultTrainingTime');
+        
         // Progress elements
         this.uploadProgressSection = document.getElementById('uploadProgressSection');
         this.progressFill = document.getElementById('progressFill');
@@ -64,6 +84,8 @@ class FileManagerApp {
         this.selectFilesSection = document.getElementById('selectFilesSection');
         this.optionsSection = document.getElementById('optionsSection');
         this.uploadSection = document.getElementById('uploadSection');
+        this.trainingSection = document.getElementById('trainingSection');
+        this.resultSection = document.getElementById('resultSection');
     }
 
     setupEventListeners() {
@@ -130,6 +152,24 @@ class FileManagerApp {
             this.uploadAllFiles();
         });
 
+        // Step 4 button actions (Training)
+        this.trainingBackBtn.addEventListener('click', () => {
+            this.goToStep(3);
+        });
+
+        // Step 5 button actions (Result)
+        this.downloadModelBtn.addEventListener('click', () => {
+            this.downloadModel();
+        });
+
+        this.useInAriaBtn.addEventListener('click', () => {
+            this.useInAria();
+        });
+
+        this.generateBtn.addEventListener('click', () => {
+            this.generateImages();
+        });
+
         // Training options event listeners
         this.setupTrainingOptionsListeners();
     }
@@ -152,6 +192,12 @@ class FileManagerApp {
         // Training steps slider
         this.stepsSlider.addEventListener('input', (e) => {
             this.updateTrainingSteps(parseInt(e.target.value));
+        });
+    }
+
+    setupTrainingManager() {
+        this.trainingManager.setCompletionCallback(() => {
+            this.goToStep(5);
         });
     }
 
@@ -206,7 +252,18 @@ class FileManagerApp {
         } else if (step === 3) {
             this.uploadSection.classList.add('active');
             this.populateUploadSection();
+        } else if (step === 4) {
+            this.trainingSection.classList.add('active');
+            this.startTraining();
+        } else if (step === 5) {
+            this.resultSection.classList.add('active');
+            this.populateResultSection();
         }
+    }
+
+    startTraining() {
+        // Start the training process
+        this.trainingManager.startTraining(this.trainingOptions.steps);
     }
 
     populateUploadSection() {
@@ -249,6 +306,23 @@ class FileManagerApp {
                 this.uploadFileList.appendChild(imageItem);
             }
         }
+    }
+
+    populateResultSection() {
+        // Update result summary
+        this.resultTrainingType.textContent = this.trainingOptions.type.charAt(0).toUpperCase() + this.trainingOptions.type.slice(1);
+        this.resultKeyword.textContent = this.trainingOptions.keyword || 'myartist';
+        this.resultSteps.textContent = this.trainingOptions.steps;
+        
+        // Calculate training time (simulated)
+        const estimatedMinutes = Math.floor(this.trainingOptions.steps / 30); // Rough estimate
+        const hours = Math.floor(estimatedMinutes / 60);
+        const minutes = estimatedMinutes % 60;
+        this.resultTrainingTime.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+        // Set placeholder text with keyword
+        const keyword = this.trainingOptions.keyword || 'myartist';
+        this.promptInput.placeholder = `Enter your prompt here... (e.g., 'a beautiful landscape in ${keyword} style')`;
     }
 
     createUploadFileItem(name, details, icon, status) {
@@ -492,6 +566,11 @@ class FileManagerApp {
         if (failed === 0) {
             this.showStatus(`All ${uploaded} files uploaded successfully with training configuration!`, 'success');
             this.uploadStatusText.textContent = 'Completed';
+            
+            // Auto-proceed to training after successful upload
+            setTimeout(() => {
+                this.goToStep(4);
+            }, 2000);
         } else {
             this.showStatus(`${uploaded} files uploaded, ${failed} failed.`, 'error');
             this.uploadStatusText.textContent = 'Completed with errors';
@@ -503,6 +582,60 @@ class FileManagerApp {
         setTimeout(() => {
             this.showUploadProgress(false);
         }, 3000);
+    }
+
+    async generateImages() {
+        const prompt = this.promptInput.value.trim();
+        if (!prompt) {
+            alert('Please enter a prompt to generate images.');
+            return;
+        }
+
+        const count = parseInt(this.imageCount.value);
+        const size = this.imageSize.value;
+        const keyword = this.trainingOptions.keyword;
+
+        this.generateBtn.disabled = true;
+        this.generateBtn.textContent = 'Generating...';
+
+        try {
+            await this.imageGenerator.generateImages(prompt, {
+                count,
+                size,
+                keyword
+            });
+        } catch (error) {
+            console.error('Generation failed:', error);
+            alert('Image generation failed. Please try again.');
+        } finally {
+            this.generateBtn.disabled = false;
+            this.generateBtn.textContent = 'Generate Image';
+        }
+    }
+
+    downloadModel() {
+        // Simulate model download
+        const modelData = {
+            type: this.trainingOptions.type,
+            keyword: this.trainingOptions.keyword,
+            steps: this.trainingOptions.steps,
+            timestamp: new Date().toISOString()
+        };
+
+        const blob = new Blob([JSON.stringify(modelData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${this.trainingOptions.keyword || 'model'}_trained_model.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    useInAria() {
+        // Simulate integration with Aria
+        alert(`Model "${this.trainingOptions.keyword}" has been integrated with Aria! You can now use it in your projects.`);
     }
 
     clearAllFiles() {
