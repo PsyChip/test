@@ -19,27 +19,27 @@ export class FileManager {
 
     createFileItem(fileId, file) {
         const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
+        fileItem.className = 'bg-gray-800 border border-gray-700 rounded-md p-4 transition-all duration-300 hover:border-gray-600 hover:shadow-lg';
         fileItem.setAttribute('data-file-id', fileId);
 
         // Handle ZIP files - show ZIP summary with image count
         if (file.isZipFile) {
             fileItem.innerHTML = `
-                <div class="zip-file-indicator">
-                    <div class="zip-icon">📦</div>
-                    <div class="zip-label">ZIP Archive</div>
+                <div class="w-full h-32 bg-gradient-to-br from-yellow-600 to-orange-600 rounded-md flex flex-col items-center justify-center mb-3 border-2 border-dashed border-orange-500">
+                    <div class="text-3xl mb-2">📦</div>
+                    <div class="text-sm font-semibold text-white">ZIP Archive</div>
                 </div>
-                <div class="file-info-container">
-                    <div class="file-name" title="${file.name}">${this.truncateFileName(file.name)}</div>
-                    <div class="file-size">
+                <div class="space-y-2">
+                    <div class="font-semibold text-white truncate" title="${file.name}">${this.truncateFileName(file.name)}</div>
+                    <div class="text-sm text-gray-400">
                         ${this.imageProcessor.formatFileSize(file.size)}
                     </div>
-                    <div class="zip-image-count">
+                    <div class="text-xs text-orange-400 bg-orange-900/20 px-2 py-1 rounded-md inline-block">
                         ${file.imageCount} ${file.imageCount === 1 ? 'image' : 'images'}
                     </div>
-                    <div class="file-actions">
-                        <button class="remove-btn">Remove</button>
-                    </div>
+                    <button class="remove-btn w-full bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-md text-sm font-medium transition-all duration-300">
+                        Remove
+                    </button>
                 </div>
             `;
         } else {
@@ -47,20 +47,20 @@ export class FileManager {
             const imageUrl = URL.createObjectURL(file);
 
             fileItem.innerHTML = `
-                <img src="${imageUrl}" alt="${file.name}" class="file-thumbnail" loading="lazy">
-                <div class="file-info-container">
-                    <div class="file-name" title="${file.name}">${this.truncateFileName(file.name)}</div>
-                    <div class="file-size">
+                <img src="${imageUrl}" alt="${file.name}" class="w-full h-32 object-cover rounded-md mb-3" loading="lazy">
+                <div class="space-y-2">
+                    <div class="font-semibold text-white truncate" title="${file.name}">${this.truncateFileName(file.name)}</div>
+                    <div class="text-sm text-gray-400">
                         ${this.imageProcessor.formatFileSize(file.size)}
                     </div>
                     ${file.dimensions ? `
-                        <div class="file-dimensions">
+                        <div class="text-xs text-blue-400 bg-blue-900/20 px-2 py-1 rounded-md inline-block">
                             ${file.dimensions.width}×${file.dimensions.height}
                         </div>
                     ` : ''}
-                    <div class="file-actions">
-                        <button class="remove-btn">Remove</button>
-                    </div>
+                    <button class="remove-btn w-full bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-md text-sm font-medium transition-all duration-300">
+                        Remove
+                    </button>
                 </div>
             `;
 
@@ -101,14 +101,22 @@ export class FileManager {
 
         switch (status) {
             case 'uploading':
-                fileItem.classList.add('loading');
+                fileItem.classList.add('loading-overlay');
                 break;
             case 'uploaded':
-                fileItem.classList.remove('loading');
-                fileItem.classList.add('uploaded');
+                fileItem.classList.remove('loading-overlay');
+                fileItem.classList.add('border-green-500', 'bg-green-900/10');
+                
+                // Add checkmark
+                const checkmark = document.createElement('div');
+                checkmark.className = 'absolute top-2 right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold';
+                checkmark.textContent = '✓';
+                fileItem.style.position = 'relative';
+                fileItem.appendChild(checkmark);
                 break;
             case 'error':
-                fileItem.classList.remove('loading');
+                fileItem.classList.remove('loading-overlay');
+                fileItem.classList.add('border-red-500', 'bg-red-900/10');
                 break;
         }
     }
@@ -122,10 +130,10 @@ export class FileManager {
 
     clearAll(container) {
         container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">📁</div>
-                <p>No files selected yet</p>
-                <p class="empty-subtitle">Upload some images to get started</p>
+            <div class="empty-state col-span-full text-center py-16 text-gray-500">
+                <div class="text-6xl mb-4 opacity-30">📁</div>
+                <p class="text-lg mb-2">No files selected yet</p>
+                <p class="text-sm opacity-70">Upload some images to get started</p>
             </div>
         `;
     }

@@ -103,17 +103,17 @@ class FileManagerApp {
         // Drag and drop
         this.dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            this.dropZone.classList.add('dragover');
+            this.dropZone.classList.add('bg-gray-800');
         });
 
         this.dropZone.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            this.dropZone.classList.remove('dragover');
+            this.dropZone.classList.remove('bg-gray-800');
         });
 
         this.dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            this.dropZone.classList.remove('dragover');
+            this.dropZone.classList.remove('bg-gray-800');
             this.handleFiles(e.dataTransfer.files);
         });
 
@@ -183,8 +183,12 @@ class FileManagerApp {
         // Training type selection
         this.trainingTypeCards.forEach(card => {
             card.addEventListener('click', () => {
-                this.trainingTypeCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
+                this.trainingTypeCards.forEach(c => {
+                    c.classList.remove('border-red-500', 'bg-red-900/20');
+                    c.classList.add('border-gray-700', 'bg-gray-800');
+                });
+                card.classList.remove('border-gray-700', 'bg-gray-800');
+                card.classList.add('border-red-500', 'bg-red-900/20');
                 this.trainingOptions.type = card.dataset.type;
             });
         });
@@ -209,6 +213,13 @@ class FileManagerApp {
     initializeTrainingOptions() {
         // Set default training steps
         this.updateTrainingSteps(2); // Default to 500 steps (index 2)
+        
+        // Set default training type to active
+        const defaultCard = document.querySelector('.training-type-card[data-type="style"]');
+        if (defaultCard) {
+            defaultCard.classList.remove('border-gray-700', 'bg-gray-800');
+            defaultCard.classList.add('border-red-500', 'bg-red-900/20');
+        }
     }
 
     updateTrainingSteps(sliderValue) {
@@ -237,30 +248,57 @@ class FileManagerApp {
         
         // Update step indicators
         document.querySelectorAll('.step').forEach((stepEl, index) => {
-            stepEl.classList.remove('active', 'completed');
+            const stepNumber = stepEl.querySelector('.step-number');
+            const stepLabel = stepEl.querySelector('.step-label');
+            
+            stepEl.classList.remove('active');
+            stepNumber.classList.remove('bg-red-500', 'text-white', 'bg-green-500');
+            stepNumber.classList.add('bg-gray-700', 'text-white');
+            stepLabel.classList.remove('text-white', 'text-green-400');
+            stepLabel.classList.add('text-gray-300');
+            
             if (index + 1 < step) {
-                stepEl.classList.add('completed');
+                // Completed step
+                stepNumber.classList.remove('bg-gray-700');
+                stepNumber.classList.add('bg-green-500');
+                stepNumber.textContent = '✓';
+                stepLabel.classList.remove('text-gray-300');
+                stepLabel.classList.add('text-green-400');
             } else if (index + 1 === step) {
+                // Active step
                 stepEl.classList.add('active');
+                stepNumber.classList.remove('bg-gray-700');
+                stepNumber.classList.add('bg-red-500');
+                stepLabel.classList.remove('text-gray-300');
+                stepLabel.classList.add('text-white');
+            } else {
+                // Future step
+                stepNumber.textContent = index + 1;
             }
         });
 
         // Show/hide sections
         document.querySelectorAll('.step-section').forEach(section => {
+            section.classList.add('hidden');
             section.classList.remove('active');
         });
 
         if (step === 1) {
+            this.selectFilesSection.classList.remove('hidden');
             this.selectFilesSection.classList.add('active');
         } else if (step === 2) {
+            this.optionsSection.classList.remove('hidden');
             this.optionsSection.classList.add('active');
         } else if (step === 3) {
+            this.uploadSection.classList.remove('hidden');
             this.uploadSection.classList.add('active');
             this.populateUploadSection();
         } else if (step === 4) {
+            this.trainingSection.classList.remove('hidden');
             this.trainingSection.classList.add('active');
             this.startTraining();
         } else if (step === 5) {
+            this.resultSection.classList.remove('hidden');
             this.resultSection.classList.add('active');
             this.populateResultSection();
         }
@@ -340,16 +378,30 @@ class FileManagerApp {
 
     createUploadFileItem(name, details, icon, status) {
         const item = document.createElement('div');
-        item.className = 'upload-file-item';
+        item.className = 'flex items-center space-x-4 p-3 bg-gray-900 border border-gray-700 rounded-md mb-2 transition-all duration-300 hover:border-gray-600';
+        
+        const statusClasses = {
+            ready: 'text-blue-400 bg-blue-900/20',
+            uploading: 'text-yellow-400 bg-yellow-900/20',
+            uploaded: 'text-green-400 bg-green-900/20',
+            error: 'text-red-400 bg-red-900/20'
+        };
+        
+        const statusTexts = {
+            ready: 'Ready',
+            uploading: 'Uploading...',
+            uploaded: 'Uploaded',
+            error: 'Error'
+        };
         
         item.innerHTML = `
-            <div class="upload-file-icon">${icon}</div>
-            <div class="upload-file-info">
-                <div class="upload-file-name">${this.truncateFileName(name, 40)}</div>
-                <div class="upload-file-details">${details}</div>
+            <div class="text-2xl">${icon}</div>
+            <div class="flex-1 min-w-0">
+                <div class="font-semibold text-white truncate">${this.truncateFileName(name, 40)}</div>
+                <div class="text-sm text-gray-400">${details}</div>
             </div>
-            <div class="upload-file-status ${status}">
-                ${status === 'ready' ? 'Ready' : status === 'uploading' ? 'Uploading...' : status === 'uploaded' ? 'Uploaded' : 'Error'}
+            <div class="px-2 py-1 rounded-md text-xs font-medium ${statusClasses[status]}">
+                ${statusTexts[status]}
             </div>
         `;
         
@@ -522,11 +574,13 @@ class FileManagerApp {
         this.uploadStatusText.textContent = 'Uploading...';
 
         // Update upload file list items to show uploading status
-        const uploadItems = this.uploadFileList.querySelectorAll('.upload-file-item');
+        const uploadItems = this.uploadFileList.querySelectorAll('div');
         uploadItems.forEach(item => {
-            const statusEl = item.querySelector('.upload-file-status');
-            statusEl.className = 'upload-file-status uploading';
-            statusEl.textContent = 'Uploading...';
+            const statusEl = item.querySelector('div:last-child');
+            if (statusEl) {
+                statusEl.className = 'px-2 py-1 rounded-md text-xs font-medium text-yellow-400 bg-yellow-900/20';
+                statusEl.textContent = 'Uploading...';
+            }
         });
 
         let uploaded = 0;
@@ -564,13 +618,15 @@ class FileManagerApp {
 
         // Update upload file list items to show final status
         uploadItems.forEach(item => {
-            const statusEl = item.querySelector('.upload-file-status');
-            if (failed === 0) {
-                statusEl.className = 'upload-file-status uploaded';
-                statusEl.textContent = 'Uploaded';
-            } else {
-                statusEl.className = 'upload-file-status error';
-                statusEl.textContent = 'Error';
+            const statusEl = item.querySelector('div:last-child');
+            if (statusEl) {
+                if (failed === 0) {
+                    statusEl.className = 'px-2 py-1 rounded-md text-xs font-medium text-green-400 bg-green-900/20';
+                    statusEl.textContent = 'Uploaded';
+                } else {
+                    statusEl.className = 'px-2 py-1 rounded-md text-xs font-medium text-red-400 bg-red-900/20';
+                    statusEl.textContent = 'Error';
+                }
             }
         });
 
@@ -654,10 +710,10 @@ class FileManagerApp {
     clearAllFiles() {
         this.files.clear();
         this.fileGrid.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">📁</div>
-                <p>No files selected yet</p>
-                <p class="empty-subtitle">Upload some images to get started</p>
+            <div class="empty-state col-span-full text-center py-16 text-gray-500">
+                <div class="text-6xl mb-4 opacity-30">📁</div>
+                <p class="text-lg mb-2">No files selected yet</p>
+                <p class="text-sm opacity-70">Upload some images to get started</p>
             </div>
         `;
         this.updateUI();
@@ -674,10 +730,10 @@ class FileManagerApp {
         const emptyState = this.fileGrid.querySelector('.empty-state');
         if (fileCount === 0 && !emptyState) {
             this.fileGrid.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📁</div>
-                    <p>No files selected yet</p>
-                    <p class="empty-subtitle">Upload some images to get started</p>
+                <div class="empty-state col-span-full text-center py-16 text-gray-500">
+                    <div class="text-6xl mb-4 opacity-30">📁</div>
+                    <p class="text-lg mb-2">No files selected yet</p>
+                    <p class="text-sm opacity-70">Upload some images to get started</p>
                 </div>
             `;
         } else if (fileCount > 0 && emptyState) {
@@ -686,8 +742,10 @@ class FileManagerApp {
     }
 
     showUploadProgress(show) {
-        this.uploadProgressSection.style.display = show ? 'block' : 'none';
-        if (!show) {
+        if (show) {
+            this.uploadProgressSection.classList.remove('hidden');
+        } else {
+            this.uploadProgressSection.classList.add('hidden');
             this.updateProgress(0, '');
         }
     }
@@ -698,18 +756,22 @@ class FileManagerApp {
         
         if (message) {
             this.uploadStatus.textContent = message;
-            this.uploadStatus.className = 'upload-status';
+            this.uploadStatus.className = 'text-sm text-gray-400';
         }
     }
 
     showStatus(message, type) {
         this.uploadStatus.textContent = message;
-        this.uploadStatus.className = `upload-status ${type}`;
-        this.uploadProgressSection.style.display = 'block';
+        const typeClasses = {
+            success: 'text-green-400',
+            error: 'text-red-400'
+        };
+        this.uploadStatus.className = `text-sm ${typeClasses[type] || 'text-gray-400'}`;
+        this.uploadProgressSection.classList.remove('hidden');
         
         setTimeout(() => {
             if (this.currentStep === 1) {
-                this.uploadProgressSection.style.display = 'none';
+                this.uploadProgressSection.classList.add('hidden');
             }
         }, 5000);
     }

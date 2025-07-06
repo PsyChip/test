@@ -66,22 +66,22 @@ export class ImageGenerator {
 
         images.forEach((image, index) => {
             const imageItem = document.createElement('div');
-            imageItem.className = 'generated-image-item';
+            imageItem.className = 'bg-gray-800 border border-gray-700 rounded-md p-3 transition-all duration-300 hover:border-gray-600 hover:shadow-lg group';
             imageItem.innerHTML = `
-                <div class="generated-image-wrapper">
-                    <img src="${image.url}" alt="Generated image ${index + 1}" class="generated-image" loading="lazy">
-                    <div class="image-overlay">
-                        <button class="image-action-btn download-image-btn" data-image-id="${image.id}">
+                <div class="relative mb-3">
+                    <img src="${image.url}" alt="Generated image ${index + 1}" class="w-full h-32 object-cover rounded-md" loading="lazy">
+                    <div class="absolute inset-0 bg-black/70 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-2">
+                        <button class="image-action-btn bg-white text-gray-900 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors download-image-btn" data-image-id="${image.id}">
                             📥 Download
                         </button>
-                        <button class="image-action-btn use-as-reference-btn" data-image-id="${image.id}">
-                            🔄 Use as Reference
+                        <button class="image-action-btn bg-white text-gray-900 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors use-as-reference-btn" data-image-id="${image.id}">
+                            🔄 Use
                         </button>
                     </div>
                 </div>
-                <div class="generated-image-info">
-                    <div class="image-size">${image.size}</div>
-                    <div class="image-timestamp">${this.formatTimestamp(image.timestamp)}</div>
+                <div class="flex justify-between items-center text-xs text-gray-400">
+                    <span class="font-medium">${image.size}</span>
+                    <span>${this.formatTimestamp(image.timestamp)}</span>
                 </div>
             `;
 
@@ -136,7 +136,11 @@ export class ImageGenerator {
     showGenerationProgress(show) {
         const progressSection = document.getElementById('generationProgress');
         if (progressSection) {
-            progressSection.style.display = show ? 'block' : 'none';
+            if (show) {
+                progressSection.classList.remove('hidden');
+            } else {
+                progressSection.classList.add('hidden');
+            }
         }
     }
 
@@ -167,10 +171,10 @@ export class ImageGenerator {
         const grid = document.getElementById('generatedImagesGrid');
         if (grid) {
             grid.innerHTML = `
-                <div class="generation-placeholder">
-                    <div class="placeholder-icon">🎨</div>
-                    <p>Generated images will appear here</p>
-                    <p class="placeholder-subtitle">Enter a prompt and click "Generate Image" to start</p>
+                <div class="generation-placeholder col-span-2 text-center py-16 text-gray-500 bg-gray-800 border-2 border-dashed border-gray-700 rounded-md">
+                    <div class="text-4xl mb-4 opacity-30">🎨</div>
+                    <p class="text-lg mb-2">Generated images will appear here</p>
+                    <p class="text-sm opacity-70">Enter a prompt and click "Generate Image" to start</p>
                 </div>
             `;
         }

@@ -3,140 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Manager - Drag & Drop</title>
+    <title>AI Model Training Platform</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="app-container">
-        <header class="app-header">
-            <h1>📁 File Manager</h1>
-            <p>Drag & drop images, ZIP files, or select files to manage and upload</p>
+<body class="bg-black text-white">
+    <div class="max-w-7xl mx-auto px-4 py-6 min-h-screen">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-condensed font-bold text-white mb-3">
+                🤖 AI Model Training Platform
+            </h1>
+            <p class="text-lg text-gray-300 font-sans">
+                Upload images, configure training, and generate custom AI models
+            </p>
         </header>
 
-        <!-- Steps Bar -->
-        <div class="steps-container">
-            <div class="step active" data-step="1">
-                <div class="step-number">1</div>
-                <div class="step-label">Select Files</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="2">
-                <div class="step-number">2</div>
-                <div class="step-label">Options</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="3">
-                <div class="step-number">3</div>
-                <div class="step-label">Upload</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="4">
-                <div class="step-number">4</div>
-                <div class="step-label">Training</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="5">
-                <div class="step-number">5</div>
-                <div class="step-label">Result</div>
+        <!-- Steps Progress Bar -->
+        <div class="flex items-center justify-center mb-10 bg-gray-900 rounded-md p-6 border border-gray-800">
+            <div class="flex items-center space-x-4">
+                <!-- Step 1 -->
+                <div class="step flex items-center space-x-3 active" data-step="1">
+                    <div class="step-number w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-sm font-bold text-white border-2 border-gray-600">
+                        1
+                    </div>
+                    <span class="step-label font-condensed font-semibold text-gray-300">Select Files</span>
+                </div>
+                
+                <div class="w-8 h-0.5 bg-gray-700"></div>
+                
+                <!-- Step 2 -->
+                <div class="step flex items-center space-x-3" data-step="2">
+                    <div class="step-number w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-sm font-bold text-white border-2 border-gray-600">
+                        2
+                    </div>
+                    <span class="step-label font-condensed font-semibold text-gray-300">Options</span>
+                </div>
+                
+                <div class="w-8 h-0.5 bg-gray-700"></div>
+                
+                <!-- Step 3 -->
+                <div class="step flex items-center space-x-3" data-step="3">
+                    <div class="step-number w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-sm font-bold text-white border-2 border-gray-600">
+                        3
+                    </div>
+                    <span class="step-label font-condensed font-semibold text-gray-300">Upload</span>
+                </div>
+                
+                <div class="w-8 h-0.5 bg-gray-700"></div>
+                
+                <!-- Step 4 -->
+                <div class="step flex items-center space-x-3" data-step="4">
+                    <div class="step-number w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-sm font-bold text-white border-2 border-gray-600">
+                        4
+                    </div>
+                    <span class="step-label font-condensed font-semibold text-gray-300">Training</span>
+                </div>
+                
+                <div class="w-8 h-0.5 bg-gray-700"></div>
+                
+                <!-- Step 5 -->
+                <div class="step flex items-center space-x-3" data-step="5">
+                    <div class="step-number w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-sm font-bold text-white border-2 border-gray-600">
+                        5
+                    </div>
+                    <span class="step-label font-condensed font-semibold text-gray-300">Result</span>
+                </div>
             </div>
         </div>
 
-        <main class="main-content">
-            <!-- Step 1: File Selection Section -->
+        <!-- Main Content -->
+        <main>
+            <!-- Step 1: File Selection -->
             <section class="step-section active" id="selectFilesSection">
-                <div class="file-manager-section">
-                    <!-- Embedded Drop Zone -->
-                    <div class="drop-zone" id="dropZone">
-                        <div class="drop-zone-content">
-                            <div class="drop-icon">📤</div>
-                            <h3>Drop images or ZIP files here or click to select files</h3>
-                            <button class="select-files-btn" id="selectFilesBtn">
+                <div class="bg-gray-900 rounded-md border border-gray-800">
+                    <!-- Drop Zone -->
+                    <div class="drop-zone border-b border-gray-800 p-8 text-center cursor-pointer transition-all duration-300 hover:bg-gray-800" id="dropZone">
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="text-4xl text-gray-500">📤</div>
+                            <h3 class="text-xl font-condensed font-semibold text-white">
+                                Drop images or ZIP files here or click to select files
+                            </h3>
+                            <button class="select-files-btn bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25" id="selectFilesBtn">
                                 Select Files
                             </button>
-                            <input type="file" id="fileInput" accept="image/*,.zip" multiple hidden>
-                            <p class="file-info">Supports: JPG, PNG, GIF, WebP, ZIP</p>
+                            <input type="file" id="fileInput" accept="image/*,.zip" multiple class="hidden">
+                            <p class="text-sm text-gray-400">Supports: JPG, PNG, GIF, WebP, ZIP</p>
                         </div>
                     </div>
 
-                    <div class="file-manager-header">
-                        <h2>📂 Selected Files</h2>
-                        <div class="file-manager-actions">
-                            <span class="file-count" id="fileCount">0 files</span>
-                            <button class="clear-all-btn" id="clearAllBtn" disabled>
+                    <!-- File Manager Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center p-6 space-y-4 md:space-y-0">
+                        <h2 class="text-2xl font-condensed font-bold text-white">📂 Selected Files</h2>
+                        <div class="flex items-center space-x-4">
+                            <span class="file-count bg-gray-800 text-gray-300 px-3 py-1 rounded-md text-sm font-medium" id="fileCount">0 files</span>
+                            <button class="clear-all-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" id="clearAllBtn" disabled>
                                 Clear All
                             </button>
-                            <button class="proceed-btn" id="proceedBtn" disabled>
+                            <button class="proceed-btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-red-500/25" id="proceedBtn" disabled>
                                 Proceed to Options →
                             </button>
                         </div>
                     </div>
                     
-                    <div class="file-grid" id="fileGrid">
-                        <div class="empty-state">
-                            <div class="empty-icon">📁</div>
-                            <p>No files selected yet</p>
-                            <p class="empty-subtitle">Upload some images to get started</p>
+                    <!-- File Grid -->
+                    <div class="file-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6 pt-0 min-h-[200px]" id="fileGrid">
+                        <div class="empty-state col-span-full text-center py-16 text-gray-500">
+                            <div class="text-6xl mb-4 opacity-30">📁</div>
+                            <p class="text-lg mb-2">No files selected yet</p>
+                            <p class="text-sm opacity-70">Upload some images to get started</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 2: Options Section -->
-            <section class="step-section" id="optionsSection">
-                <div class="options-section">
-                    <div class="options-header">
-                        <h2>⚙️ Training Options</h2>
-                        <div class="options-actions">
-                            <button class="back-btn" id="optionsBackBtn">
+            <!-- Step 2: Options -->
+            <section class="step-section hidden" id="optionsSection">
+                <div class="bg-gray-900 rounded-md border border-gray-800 p-6">
+                    <!-- Options Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+                        <h2 class="text-2xl font-condensed font-bold text-white">⚙️ Training Options</h2>
+                        <div class="flex items-center space-x-4">
+                            <button class="back-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300" id="optionsBackBtn">
                                 ← Back to Selection
                             </button>
-                            <button class="proceed-btn" id="optionsProceedBtn">
+                            <button class="proceed-btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25" id="optionsProceedBtn">
                                 Proceed to Upload →
                             </button>
                         </div>
                     </div>
 
-                    <!-- Training Type Section -->
-                    <div class="options-group">
-                        <h3>🎯 Training Type</h3>
-                        <p class="options-description">Choose the type of training model you want to create</p>
-                        <div class="training-type-grid">
-                            <div class="training-type-card active" data-type="style">
-                                <div class="training-type-icon">🎨</div>
-                                <div class="training-type-title">Style</div>
-                                <div class="training-type-description">Train on artistic styles, techniques, or visual aesthetics</div>
+                    <!-- Training Type -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-condensed font-semibold text-white mb-2">🎯 Training Type</h3>
+                        <p class="text-gray-400 mb-6">Choose the type of training model you want to create</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="training-type-card bg-gray-800 border-2 border-gray-700 rounded-md p-6 text-center cursor-pointer transition-all duration-300 hover:border-red-500 active" data-type="style">
+                                <div class="text-3xl mb-3">🎨</div>
+                                <div class="font-condensed font-semibold text-lg mb-2">Style</div>
+                                <div class="text-sm text-gray-400">Train on artistic styles, techniques, or visual aesthetics</div>
                             </div>
-                            <div class="training-type-card" data-type="character">
-                                <div class="training-type-icon">👤</div>
-                                <div class="training-type-title">Character</div>
-                                <div class="training-type-description">Train on specific characters, people, or subjects</div>
+                            <div class="training-type-card bg-gray-800 border-2 border-gray-700 rounded-md p-6 text-center cursor-pointer transition-all duration-300 hover:border-red-500" data-type="character">
+                                <div class="text-3xl mb-3">👤</div>
+                                <div class="font-condensed font-semibold text-lg mb-2">Character</div>
+                                <div class="text-sm text-gray-400">Train on specific characters, people, or subjects</div>
                             </div>
-                            <div class="training-type-card" data-type="generic">
-                                <div class="training-type-icon">🌐</div>
-                                <div class="training-type-title">Generic</div>
-                                <div class="training-type-description">General purpose training for various concepts</div>
+                            <div class="training-type-card bg-gray-800 border-2 border-gray-700 rounded-md p-6 text-center cursor-pointer transition-all duration-300 hover:border-red-500" data-type="generic">
+                                <div class="text-3xl mb-3">🌐</div>
+                                <div class="font-condensed font-semibold text-lg mb-2">Generic</div>
+                                <div class="text-sm text-gray-400">General purpose training for various concepts</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Keyword Section -->
-                    <div class="options-group">
-                        <h3>🏷️ Keyword</h3>
-                        <p class="options-description">Enter a unique keyword that will trigger your trained model</p>
-                        <div class="keyword-input-container">
-                            <input type="text" id="keywordInput" class="keyword-input" placeholder="Enter your unique keyword (e.g., myartist, mycharacter)" maxlength="50">
-                            <div class="keyword-hint">This keyword will be used to activate your trained model in prompts</div>
+                    <!-- Keyword -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-condensed font-semibold text-white mb-2">🏷️ Keyword</h3>
+                        <p class="text-gray-400 mb-4">Enter a unique keyword that will trigger your trained model</p>
+                        <div class="max-w-md">
+                            <input type="text" id="keywordInput" class="w-full bg-gray-800 border border-gray-700 rounded-md px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" placeholder="Enter your unique keyword (e.g., myartist, mycharacter)" maxlength="50">
+                            <div class="text-xs text-gray-500 mt-2 italic">This keyword will be used to activate your trained model in prompts</div>
                         </div>
                     </div>
 
-                    <!-- Training Steps Section -->
-                    <div class="options-group">
-                        <h3>📊 Training Steps</h3>
-                        <p class="options-description">Choose the number of training steps - more steps generally mean better quality but longer training time</p>
-                        <div class="training-steps-container">
-                            <div class="steps-slider-container">
-                                <input type="range" id="stepsSlider" class="steps-slider" min="0" max="7" value="2" step="1">
-                                <div class="steps-labels">
+                    <!-- Training Steps -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-condensed font-semibold text-white mb-2">📊 Training Steps</h3>
+                        <p class="text-gray-400 mb-6">Choose the number of training steps - more steps generally mean better quality but longer training time</p>
+                        <div class="max-w-2xl">
+                            <div class="mb-6">
+                                <input type="range" id="stepsSlider" class="w-full h-2 bg-gray-700 rounded-md appearance-none cursor-pointer slider" min="0" max="7" value="2" step="1">
+                                <div class="flex justify-between text-xs text-gray-500 mt-2">
                                     <span>100</span>
                                     <span>300</span>
                                     <span>500</span>
@@ -147,126 +183,130 @@
                                     <span>2000</span>
                                 </div>
                             </div>
-                            <div class="steps-info">
-                                <div class="steps-value" id="stepsValue">500</div>
-                                <div class="steps-description" id="stepsDescription">Balanced training - good quality with reasonable training time</div>
+                            <div class="bg-gray-800 border border-gray-700 rounded-md p-6 text-center">
+                                <div class="text-3xl font-bold text-red-500 mb-2" id="stepsValue">500</div>
+                                <div class="text-sm text-gray-400" id="stepsDescription">Balanced training - good quality with reasonable training time</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 3: Upload Section -->
-            <section class="step-section" id="uploadSection">
-                <div class="upload-section">
-                    <div class="upload-header">
-                        <h2>🚀 Upload Files</h2>
-                        <div class="upload-actions">
-                            <button class="back-btn" id="backBtn">
+            <!-- Step 3: Upload -->
+            <section class="step-section hidden" id="uploadSection">
+                <div class="bg-gray-900 rounded-md border border-gray-800 p-6">
+                    <!-- Upload Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+                        <h2 class="text-2xl font-condensed font-bold text-white">🚀 Upload Files</h2>
+                        <div class="flex items-center space-x-4">
+                            <button class="back-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300" id="backBtn">
                                 ← Back to Options
                             </button>
-                            <button class="upload-all-btn" id="uploadAllBtn">
+                            <button class="upload-all-btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25" id="uploadAllBtn">
                                 Start Upload
                             </button>
                         </div>
                     </div>
 
                     <!-- Upload Summary -->
-                    <div class="upload-summary">
-                        <div class="summary-card">
-                            <div class="summary-icon">📊</div>
-                            <div class="summary-content">
-                                <h3>Upload Summary</h3>
-                                <div class="summary-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Total Files:</span>
-                                        <span class="stat-value" id="totalFiles">0</span>
+                    <div class="bg-gray-800 border border-gray-700 rounded-md p-6 mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl text-gray-400">📊</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-condensed font-semibold text-white mb-4">Upload Summary</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Total Files:</div>
+                                        <div class="font-semibold text-white" id="totalFiles">0</div>
                                     </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Total Size:</span>
-                                        <span class="stat-value" id="totalSize">0 MB</span>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Total Size:</div>
+                                        <div class="font-semibold text-white" id="totalSize">0 MB</div>
                                     </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Training Type:</span>
-                                        <span class="stat-value" id="summaryTrainingType">Style</span>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Training Type:</div>
+                                        <div class="font-semibold text-white" id="summaryTrainingType">Style</div>
                                     </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Keyword:</span>
-                                        <span class="stat-value" id="summaryKeyword">-</span>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Keyword:</div>
+                                        <div class="font-semibold text-white" id="summaryKeyword">-</div>
                                     </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Training Steps:</span>
-                                        <span class="stat-value" id="summarySteps">500</span>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Training Steps:</div>
+                                        <div class="font-semibold text-white" id="summarySteps">500</div>
                                     </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status:</span>
-                                        <span class="stat-value" id="uploadStatusText">Ready</span>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Status:</div>
+                                        <div class="font-semibold text-white" id="uploadStatusText">Ready</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- File List for Upload -->
-                    <div class="upload-file-list" id="uploadFileList">
+                    <!-- File List -->
+                    <div class="bg-gray-800 border border-gray-700 rounded-md p-4 mb-6 max-h-96 overflow-y-auto" id="uploadFileList">
                         <!-- Files will be populated here -->
                     </div>
 
                     <!-- Upload Progress -->
-                    <div class="upload-progress-section" id="uploadProgressSection" style="display: none;">
-                        <h3>Upload Progress</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
+                    <div class="upload-progress-section bg-gray-800 border border-gray-700 rounded-md p-6 hidden" id="uploadProgressSection">
+                        <h3 class="text-lg font-condensed font-semibold text-white mb-4">Upload Progress</h3>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="flex-1 bg-gray-700 rounded-md h-3 overflow-hidden">
+                                <div class="progress-fill bg-red-500 h-full transition-all duration-300 rounded-md" id="progressFill" style="width: 0%"></div>
                             </div>
-                            <span class="progress-text" id="progressText">0%</span>
+                            <span class="text-red-500 font-bold min-w-[40px]" id="progressText">0%</span>
                         </div>
-                        <div class="upload-status" id="uploadStatus"></div>
+                        <div class="text-sm text-gray-400" id="uploadStatus"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 4: Training Section -->
-            <section class="step-section" id="trainingSection">
-                <div class="training-section">
-                    <div class="training-header">
-                        <h2>🧠 Training in Progress</h2>
-                        <div class="training-actions">
-                            <button class="back-btn" id="trainingBackBtn">
+            <!-- Step 4: Training -->
+            <section class="step-section hidden" id="trainingSection">
+                <div class="bg-gray-900 rounded-md border border-gray-800 p-6">
+                    <!-- Training Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+                        <h2 class="text-2xl font-condensed font-bold text-white">🧠 Training in Progress</h2>
+                        <div class="flex items-center space-x-4">
+                            <button class="back-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300" id="trainingBackBtn">
                                 ← Back to Upload
                             </button>
-                            <button class="skip-training-btn" id="skipTrainingBtn" title="Development: Skip to Result">
+                            <button class="skip-training-btn bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300 text-sm" id="skipTrainingBtn" title="Development: Skip to Result">
                                 ⚡ Skip
                             </button>
                         </div>
                     </div>
 
                     <!-- Training Status -->
-                    <div class="training-status-card">
-                        <div class="training-status-icon">⚡</div>
-                        <div class="training-status-content">
-                            <h3>Model Training Active</h3>
-                            <p>Your AI model is being trained with the uploaded images. This process may take some time depending on the number of training steps.</p>
+                    <div class="bg-blue-900/20 border border-blue-800 rounded-md p-6 mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl">⚡</div>
+                            <div>
+                                <h3 class="text-lg font-condensed font-semibold text-blue-300 mb-2">Model Training Active</h3>
+                                <p class="text-blue-200">Your AI model is being trained with the uploaded images. This process may take some time depending on the number of training steps.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Training Images Display -->
-                    <div class="training-images-section">
-                        <div class="training-image-container">
-                            <h4>📸 Training Data Sample</h4>
-                            <div class="training-image-wrapper">
-                                <img id="staticTrainingImage" src="https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Training sample" class="training-image static">
-                                <div class="image-label">Sample Training Image</div>
+                    <!-- Training Images -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <h4 class="text-lg font-condensed font-semibold text-white mb-4">📸 Training Data Sample</h4>
+                            <div class="bg-gray-800 border border-gray-700 rounded-md p-4">
+                                <img id="staticTrainingImage" src="https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Training sample" class="w-full h-64 object-cover rounded-md mb-3">
+                                <div class="text-center text-sm text-gray-400 font-medium">Sample Training Image</div>
                             </div>
                         </div>
 
-                        <div class="training-image-container">
-                            <h4>🔄 Current Training Output</h4>
-                            <div class="training-image-wrapper">
-                                <img id="dynamicTrainingImage" src="https://picsum.photos/400/400?random=1" alt="Training progress" class="training-image dynamic">
-                                <div class="image-label">Live Training Progress</div>
-                                <div class="refresh-indicator">
-                                    <div class="refresh-dot"></div>
+                        <div>
+                            <h4 class="text-lg font-condensed font-semibold text-white mb-4">🔄 Current Training Output</h4>
+                            <div class="bg-gray-800 border border-gray-700 rounded-md p-4 relative">
+                                <img id="dynamicTrainingImage" src="https://picsum.photos/400/400?random=1" alt="Training progress" class="w-full h-64 object-cover rounded-md mb-3 transition-opacity duration-500">
+                                <div class="text-center text-sm text-gray-400 font-medium">Live Training Progress</div>
+                                <div class="absolute top-6 right-6 bg-black/70 text-white px-2 py-1 rounded-md text-xs flex items-center space-x-1">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></div>
                                     <span>Updating...</span>
                                 </div>
                             </div>
@@ -274,110 +314,121 @@
                     </div>
 
                     <!-- Training Progress -->
-                    <div class="training-progress-section">
-                        <h3>Training Progress</h3>
-                        <div class="large-progress-container">
-                            <div class="large-progress-bar">
-                                <div class="large-progress-fill" id="trainingProgressFill"></div>
-                                <div class="progress-percentage" id="trainingProgressText">0%</div>
+                    <div class="bg-gray-800 border border-gray-700 rounded-md p-6">
+                        <h3 class="text-lg font-condensed font-semibold text-white mb-6">Training Progress</h3>
+                        
+                        <!-- Large Progress Bar -->
+                        <div class="relative mb-6">
+                            <div class="w-full h-6 bg-gray-700 rounded-md overflow-hidden relative">
+                                <div class="large-progress-fill h-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500 rounded-md relative overflow-hidden shimmer" id="trainingProgressFill" style="width: 0%"></div>
+                                <div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-white" id="trainingProgressText">0%</div>
                             </div>
                         </div>
                         
-                        <div class="training-stats">
-                            <div class="training-stat">
-                                <span class="stat-label">Current Step:</span>
-                                <span class="stat-value" id="currentStep">0</span>
-                                <span class="stat-total">/ <span id="totalSteps">500</span></span>
+                        <!-- Training Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-gray-900 border border-gray-700 rounded-md p-4 text-center">
+                                <div class="text-xs text-gray-500 mb-1">Current Step:</div>
+                                <div class="text-lg font-bold text-white">
+                                    <span id="currentStep">0</span>
+                                    <span class="text-sm text-gray-400">/ <span id="totalSteps">500</span></span>
+                                </div>
                             </div>
-                            <div class="training-stat">
-                                <span class="stat-label">Elapsed Time:</span>
-                                <span class="stat-value" id="elapsedTime">00:00:00</span>
+                            <div class="bg-gray-900 border border-gray-700 rounded-md p-4 text-center">
+                                <div class="text-xs text-gray-500 mb-1">Elapsed Time:</div>
+                                <div class="text-lg font-bold text-white" id="elapsedTime">00:00:00</div>
                             </div>
-                            <div class="training-stat">
-                                <span class="stat-label">Remaining Time:</span>
-                                <span class="stat-value" id="remainingTime">Calculating...</span>
+                            <div class="bg-gray-900 border border-gray-700 rounded-md p-4 text-center">
+                                <div class="text-xs text-gray-500 mb-1">Remaining Time:</div>
+                                <div class="text-lg font-bold text-white" id="remainingTime">Calculating...</div>
                             </div>
-                            <div class="training-stat">
-                                <span class="stat-label">Training Speed:</span>
-                                <span class="stat-value" id="trainingSpeed">- steps/min</span>
+                            <div class="bg-gray-900 border border-gray-700 rounded-md p-4 text-center">
+                                <div class="text-xs text-gray-500 mb-1">Training Speed:</div>
+                                <div class="text-lg font-bold text-white" id="trainingSpeed">- steps/min</div>
                             </div>
                         </div>
 
-                        <div class="training-status-text" id="trainingStatusText">
-                            Initializing training process...
+                        <div class="bg-gray-900 border border-gray-700 rounded-md p-4 text-center">
+                            <div class="text-sm text-gray-400 italic" id="trainingStatusText">
+                                Initializing training process...
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Step 5: Result Section -->
-            <section class="step-section" id="resultSection">
-                <div class="result-section">
-                    <div class="result-header">
-                        <h2>🎉 Training Complete</h2>
-                        <div class="result-actions">
-                            <button class="download-model-btn" id="downloadModelBtn">
+            <!-- Step 5: Result -->
+            <section class="step-section hidden" id="resultSection">
+                <div class="bg-gray-900 rounded-md border border-gray-800 p-6">
+                    <!-- Result Header -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+                        <h2 class="text-2xl font-condensed font-bold text-white">🎉 Training Complete</h2>
+                        <div class="flex items-center space-x-4">
+                            <button class="download-model-btn bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300" id="downloadModelBtn">
                                 📥 Download Model
                             </button>
-                            <button class="use-in-aria-btn" id="useInAriaBtn">
+                            <button class="use-in-aria-btn bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md font-semibold transition-all duration-300" id="useInAriaBtn">
                                 🚀 Use in Aria
                             </button>
                         </div>
                     </div>
 
-                    <!-- Training Summary -->
-                    <div class="training-complete-card">
-                        <div class="complete-icon">✅</div>
-                        <div class="complete-content">
-                            <h3>Model Successfully Trained!</h3>
-                            <p>Your AI model has been successfully trained and is ready to use. You can now generate images using your custom keyword.</p>
-                            <div class="model-info">
-                                <div class="model-stat">
-                                    <span class="stat-label">Model Type:</span>
-                                    <span class="stat-value" id="resultTrainingType">Style</span>
-                                </div>
-                                <div class="model-stat">
-                                    <span class="stat-label">Keyword:</span>
-                                    <span class="stat-value" id="resultKeyword">myartist</span>
-                                </div>
-                                <div class="model-stat">
-                                    <span class="stat-label">Training Steps:</span>
-                                    <span class="stat-value" id="resultSteps">500</span>
-                                </div>
-                                <div class="model-stat">
-                                    <span class="stat-label">Training Time:</span>
-                                    <span class="stat-value" id="resultTrainingTime">15:32</span>
+                    <!-- Training Complete Card -->
+                    <div class="bg-green-900/20 border border-green-800 rounded-md p-6 mb-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl">✅</div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-condensed font-semibold text-green-300 mb-2">Model Successfully Trained!</h3>
+                                <p class="text-green-200 mb-4">Your AI model has been successfully trained and is ready to use. You can now generate images using your custom keyword.</p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <div class="text-xs text-green-400 mb-1">Model Type:</div>
+                                        <div class="font-semibold text-green-200" id="resultTrainingType">Style</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-green-400 mb-1">Keyword:</div>
+                                        <div class="font-semibold text-green-200" id="resultKeyword">myartist</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-green-400 mb-1">Training Steps:</div>
+                                        <div class="font-semibold text-green-200" id="resultSteps">500</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-green-400 mb-1">Training Time:</div>
+                                        <div class="font-semibold text-green-200" id="resultTrainingTime">15:32</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Image Generation Interface -->
-                    <div class="generation-interface">
-                        <div class="generation-input-section">
-                            <h3>🎨 Generate Images</h3>
-                            <p>Enter a prompt to generate images using your trained model. Include your keyword to activate the custom style.</p>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Generation Input -->
+                        <div>
+                            <h3 class="text-xl font-condensed font-semibold text-white mb-4">🎨 Generate Images</h3>
+                            <p class="text-gray-400 mb-6">Enter a prompt to generate images using your trained model. Include your keyword to activate the custom style.</p>
                             
-                            <div class="prompt-input-container">
-                                <textarea id="promptInput" class="prompt-input" placeholder="Enter your prompt here... (e.g., 'a beautiful landscape in myartist style')" rows="3"></textarea>
-                                <button class="generate-btn" id="generateBtn">
+                            <div class="space-y-4 mb-6">
+                                <textarea id="promptInput" class="w-full bg-gray-800 border border-gray-700 rounded-md px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 resize-none" placeholder="Enter your prompt here... (e.g., 'a beautiful landscape in myartist style')" rows="3"></textarea>
+                                <button class="generate-btn w-full bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-red-500/25" id="generateBtn">
                                     Generate Image
                                 </button>
                             </div>
 
-                            <div class="generation-options">
-                                <div class="option-group">
-                                    <label for="imageCount">Number of Images:</label>
-                                    <select id="imageCount" class="option-select">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="imageCount" class="block text-sm font-medium text-gray-300 mb-2">Number of Images:</label>
+                                    <select id="imageCount" class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500">
                                         <option value="1">1 Image</option>
                                         <option value="2">2 Images</option>
                                         <option value="4" selected>4 Images</option>
                                         <option value="8">8 Images</option>
                                     </select>
                                 </div>
-                                <div class="option-group">
-                                    <label for="imageSize">Image Size:</label>
-                                    <select id="imageSize" class="option-select">
+                                <div>
+                                    <label for="imageSize" class="block text-sm font-medium text-gray-300 mb-2">Image Size:</label>
+                                    <select id="imageSize" class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500">
                                         <option value="512x512" selected>512×512</option>
                                         <option value="768x768">768×768</option>
                                         <option value="1024x1024">1024×1024</option>
@@ -386,21 +437,22 @@
                             </div>
                         </div>
 
-                        <div class="generation-output-section">
-                            <h3>Generated Images</h3>
-                            <div class="generated-images-grid" id="generatedImagesGrid">
-                                <div class="generation-placeholder">
-                                    <div class="placeholder-icon">🎨</div>
-                                    <p>Generated images will appear here</p>
-                                    <p class="placeholder-subtitle">Enter a prompt and click "Generate Image" to start</p>
+                        <!-- Generation Output -->
+                        <div>
+                            <h3 class="text-xl font-condensed font-semibold text-white mb-4">Generated Images</h3>
+                            <div class="generated-images-grid grid grid-cols-2 gap-3 min-h-[300px]" id="generatedImagesGrid">
+                                <div class="generation-placeholder col-span-2 text-center py-16 text-gray-500 bg-gray-800 border-2 border-dashed border-gray-700 rounded-md">
+                                    <div class="text-4xl mb-4 opacity-30">🎨</div>
+                                    <p class="text-lg mb-2">Generated images will appear here</p>
+                                    <p class="text-sm opacity-70">Enter a prompt and click "Generate Image" to start</p>
                                 </div>
                             </div>
                             
-                            <div class="generation-progress" id="generationProgress" style="display: none;">
-                                <div class="generation-progress-bar">
-                                    <div class="generation-progress-fill" id="generationProgressFill"></div>
+                            <div class="generation-progress bg-gray-800 border border-gray-700 rounded-md p-4 mt-4 hidden" id="generationProgress">
+                                <div class="w-full bg-gray-700 rounded-md h-2 mb-2 overflow-hidden">
+                                    <div class="generation-progress-fill bg-red-500 h-full transition-all duration-300 rounded-md" id="generationProgressFill" style="width: 0%"></div>
                                 </div>
-                                <div class="generation-status" id="generationStatus">Generating images...</div>
+                                <div class="text-center text-sm text-gray-400 italic" id="generationStatus">Generating images...</div>
                             </div>
                         </div>
                     </div>
